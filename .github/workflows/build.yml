@@ -1,0 +1,25 @@
+name: build
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "*" ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y automake autopoint check pkgconf libexpat1-dev gettext libtool make git
+    - name: Configure
+      run: |
+        sh ./autogen.sh
+        ./configure
+    - name: Compile
+      run: make
+    - name: Run make check
+      run: make check
+    - name: Run make distcheck
+      run: make distcheck
